@@ -1,0 +1,29 @@
+# vim: set filetype=yaml ts=2 sw=2 sts=2 et:
+#
+---
+name: "Build docker images"
+
+on:
+  push:
+    paths:
+      - "Dockerfile"
+      - ".github/workflows/build.yml"
+
+  schedule:
+    # At 02:00 on day-of-month 1 - https://crontab.guru/#0_2_1_*_*
+    - cron: "0 0 1 * *"
+
+  workflow_dispatch:
+
+jobs:
+  build-docker-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      - uses: actions/checkout@v3
+      - run: docker buildx create --name "caddy-cloudflare" --use
+      - run: docker buildx build --platform linux/amd64,linux/arm64/v8 --push --pull --force-rm --tag "ghcr.io/${{ github.repository }}:latest" --file Dockerfile .
+      # - run: docker push --all-tags "ghcr.io/${{ github.repository }}"
+      - run: docker buildx rm "caddy-cloudflare"
