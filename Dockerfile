@@ -6,7 +6,7 @@ RUN xcaddy build \
 
 ################################################################################
 
-FROM caddy:latest
+FROM caddy:2.8.4
 
 LABEL "org.opencontainers.image.source"="https://github.com/andrius/caddy-cloudflare"
 LABEL "org.opencontainers.image.description"="Caddy with cloudflare DNS module"
