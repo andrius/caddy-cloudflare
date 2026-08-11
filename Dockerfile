@@ -3,7 +3,7 @@ FROM caddy:2.11.4-builder AS builder
 RUN xcaddy build \
       --with github.com/caddy-dns/cloudflare \
       --with github.com/mholt/caddy-webdav \
-      --with github.com/caddyserver/forwardproxy
+      --with github.com/caddyserver/forwardproxy=github.com/klzgrad/forwardproxy@naive
 
 ################################################################################
 
